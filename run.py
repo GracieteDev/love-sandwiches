@@ -13,24 +13,23 @@ CREDS = ServiceAccountCredentials.from_json_keyfile_name("creds.json", SCOPE)
 # Authorize the client
 GSPREAD_CLIENT = gspread.authorize(CREDS)
 
-try:
-    # Get the spreadsheet ID from the URL
-    spreadsheet_url = 'https://docs.google.com/spreadsheets/d/1iia808sqxPv4Cfy0SP69foD-sRDqYAys24BdaskU2y4/edit#gid=1680754323'
-    spreadsheet_id = spreadsheet_url.split('/')[5]
+# Get the spreadsheet ID from the URL
+spreadsheet_url = 'https://docs.google.com/spreadsheets/d/1iia808sqxPv4Cfy0SP69foD-sRDqYAys24BdaskU2y4/edit#gid=1680754323'
+spreadsheet_id = spreadsheet_url.split('/')[5]
 
-    # Open the spreadsheet
-    SHEET = GSPREAD_CLIENT.open_by_key(spreadsheet_id)
-
-    # Access the "sales" worksheet
-    sales = SHEET.worksheet("sales")
-
-    # Get all values from the "sales" worksheet
-    data = sales.get_all_values()
-
-    # Print the data
-    print(data)
-
-except gspread.exceptions.SpreadsheetNotFound as e:
-    print("Could not find spreadsheet. Please check the URL.")
+# Open the spreadsheet
+SHEET = GSPREAD_CLIENT.open_by_key(spreadsheet_id)
 
 
+def get_sales_data():
+        """
+        Get sales figures input from the user
+        """
+        print("Please enter sales data from the last market.")
+        print("Data should be be six numbers, separated by commas.")
+        print("Example: 10,20,30,40,50,60\n")
+        
+        data_str_data = input("Enter your data here:")
+        print(f"The data provided is {data_str}")
+        
+get_sales_data()   
