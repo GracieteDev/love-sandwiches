@@ -2,6 +2,7 @@ from wsgiref import validate
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 from pprint import pprint 
+from typing import List
 
 SCOPE = [
     "https://www.googleapis.com/auth/spreadsheets",
@@ -42,6 +43,7 @@ def get_sales_data():
             if validate_data(sales_data):
                 print("Data is valid!")
                 break
+        
         return sales_data
  
 def validate_data (values):
@@ -97,6 +99,7 @@ def update_worksheet( data, worksheet):
 def calculate_surplus_data(sales_row):
     """
     Compare sales with stock and calculate the surplus for each item type.
+    
     The surplus is defined as the sales figure subtracted from the stock:
     - Positive surplus indicates waste
     - Negative surplus indicates extra made when stock was sold out.
@@ -109,11 +112,25 @@ def calculate_surplus_data(sales_row):
     for stock, sales in zip(stock_row, sales_row):
         surplus = int(stock) - sales
         surplus_data.append(surplus)
-    print(surplus_data)
+        
+    return surplus_data
 
     
+def get_last_5_entries_sales():
+    """
+    Collects collumns of data from sales worksheet, collecting the last
+    5 entries for each sandwich and returns the data as a list of lists.
+    """
+    
+    sales =SHEET.worksheet("sales")
+    
+    
+    columns = []
+    for ind in range (1,7):
+        column: List[int | float | str | None] = sales.col_values(ind)
+        columns.append(column[-5:])
         
-        
+        return columns
         
 def main():
     """
@@ -126,5 +143,6 @@ def main():
     update_worksheet(new_surplus_data, "surplus")
 
 print("Welcome to Love Sandwiches Data Automation!\n")
-main()
+#main()
 
+sales_columns = get_last_5_entries_sales()  
