@@ -1,28 +1,17 @@
 
 import gspread
-from oauth2client.service_account import ServiceAccountCredentials
-
-from typing import List
+from google.oauth2.service_account import Credentials
 
 SCOPE = [
     "https://www.googleapis.com/auth/spreadsheets",
     "https://www.googleapis.com/auth/drive.file",
     "https://www.googleapis.com/auth/drive"
-]
+    ]
 
-# Load credentials from JSON key file
-CREDS = ServiceAccountCredentials.from_json_keyfile_name("creds.json", SCOPE)
-
-# Authorize the client
-GSPREAD_CLIENT = gspread.authorize(CREDS)
-
-# Get the spreadsheet ID from the URL1
-spreadsheet_url = 'https://docs.google.com/spreadsheets/d/1iia808sqxPv4Cfy0SP69foD-sRDqYAys24BdaskU2y4/edit#gid=1680754323'
-spreadsheet_id = spreadsheet_url.split('/')[5]
-
-# Open the spreadsheet
-SHEET = GSPREAD_CLIENT.open_by_key(spreadsheet_id)
-
+CREDS = Credentials.from_service_account_file('creds.json')
+SCOPED_CREDS = CREDS.with_scopes(SCOPE)
+GSPREAD_CLIENT = gspread.authorize(SCOPED_CREDS)
+SHEET = GSPREAD_CLIENT.open('love_sandwiches')
 
 def get_sales_data():
         """
