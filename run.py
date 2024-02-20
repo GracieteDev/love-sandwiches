@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 from wsgiref import validate
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
